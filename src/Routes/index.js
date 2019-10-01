@@ -31,7 +31,6 @@ AppRoute.propTypes = {
 };
 
 const Switches = () => {
-    console.log('***');
     return (
         <Router history={history}>
             <div>

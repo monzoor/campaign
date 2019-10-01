@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import React, { useMemo, useState, useEffect } from 'react';
 import {
     Container,
@@ -8,16 +9,26 @@ import {
     InputGroup,
     InputGroupText,
     InputGroupAddon,
-    Input
+    Input,
+    FormGroup
 } from 'reactstrap';
 import moment from 'moment';
+import DatePicker from 'react-datepicker';
+import { useSelector, useDispatch } from 'react-redux';
 import { formatToUnits } from '../../Utils/UnitFormatter';
 
 const demoData = [
     {
+        id: 0,
+        name: 'Monzoor',
+        startDate: '01/01/2020',
+        endDate: '01/05/2020',
+        Budget: 88377
+    },
+    {
         id: 1,
         name: 'Divavu',
-        startDate: '9/19/2017',
+        startDate: '9/19/2019',
         endDate: '3/9/2020',
         Budget: 88377
     },
@@ -78,17 +89,64 @@ const TableHeader = () => (
 
 const InputItems = ({ inputValues }) => {
     const [inputValue, setInputValue] = useState('');
+    const [startDate, setStartDate] = useState('');
+    const [endDate, setEndDate] = useState('');
     const searhInputValue = e => {
         setInputValue(e.target.value);
-        inputValues(e.target.value);
+        inputValues({
+            inputName: e.target.value,
+            inputStartDate: startDate,
+            inputEndDate: endDate
+        });
     };
+    useEffect(() => {
+        if (startDate && endDate) {
+            console.log('******');
+            inputValues({
+                inputName: inputValue,
+                inputStartDate: startDate,
+                inputEndDate: endDate
+            });
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [startDate, endDate]);
+
     return (
         <Row className="py-4">
-            <Col xs="4"></Col>
-            <Col xs="4"></Col>
+            <Col xs="4">
+                <FormGroup>
+                    <DatePicker
+                        className="form-control"
+                        placeholderText="Start Date"
+                        selected={startDate}
+                        selectsStart
+                        dateFormat="MM/dd/yyyy"
+                        onChange={date => setStartDate(date)}
+                    />
+                </FormGroup>
+            </Col>
+            <Col xs="4">
+                <FormGroup>
+                    <DatePicker
+                        className="form-control"
+                        placeholderText="End Date"
+                        selected={endDate}
+                        selectsEnd
+                        dateFormat="MM/dd/yyyy"
+                        onChange={date => setEndDate(date)}
+                        disabled={!startDate}
+                        endDate={endDate}
+                        minDate={startDate}
+                    />
+                </FormGroup>
+            </Col>
             <Col xs="4">
                 <InputGroup>
-                    <Input value={inputValue} onChange={searhInputValue} />
+                    <Input
+                        value={inputValue}
+                        onChange={searhInputValue}
+                        placeholder="Search By Name"
+                    />
                     <InputGroupAddon addonType="append">
                         <InputGroupText>Search</InputGroupText>
                     </InputGroupAddon>
@@ -99,26 +157,69 @@ const InputItems = ({ inputValues }) => {
 };
 
 const TableView = () => {
+    const dispatch = useDispatch();
     const momoTableHeader = useMemo(() => <TableHeader />, []);
+    const currentUploadedData = useSelector(state => state.uploadedDatas.data);
     const [noDataFound, setnoDataFound] = useState(true);
-    const [currentData, setCurrentData] = useState(demoData);
-    const searchInput = val => {
-        const regexp = new RegExp(val, 'i');
-        const filterItems = demoData.filter(x => regexp.test(x.name));
-        // if (filterItems.length < -1)
+    const [currentData, setCurrentData] = useState(currentUploadedData);
+    const searchInputs = ({ inputName, inputStartDate, inputEndDate }) => {
+        const regexp = new RegExp(inputName, 'i');
+        const filterItems = currentUploadedData.filter(item => {
+            if (inputStartDate && inputEndDate && inputName) {
+                return (
+                    moment(item.startDate, 'MM/DD/YYYY').isSameOrAfter(
+                        inputStartDate,
+                        'MM/DD/YYYY'
+                    ) &&
+                    moment(item.endDate, 'MM/DD/YYYY').isSameOrBefore(
+                        inputEndDate,
+                        'MM/DD/YYYY'
+                    ) &&
+                    regexp.test(item.name)
+                );
+            }
+            if (inputStartDate && inputEndDate) {
+                return (
+                    moment(item.startDate, 'MM/DD/YYYY').isSameOrAfter(
+                        inputStartDate,
+                        'MM/DD/YYYY'
+                    ) &&
+                    moment(item.endDate, 'MM/DD/YYYY').isSameOrBefore(
+                        inputEndDate,
+                        'MM/DD/YYYY'
+                    )
+                );
+            }
+            return regexp.test(item.name);
+        });
         setCurrentData(filterItems);
     };
+
     useEffect(() => {
-        console.log('====s====', currentData.length);
-        if (currentData.length > 0) {
+        window.AddCampaigns = data => {
+            if (Array.isArray(data)) {
+                setnoDataFound(true);
+                dispatch({
+                    type: 'SELECTED_DATA',
+                    data
+                });
+            }
+        };
+        if (
+            currentUploadedData.length > 0 &&
+            noDataFound &&
+            currentUploadedData !== currentData
+        ) {
+            setCurrentData(currentUploadedData);
             setnoDataFound(false);
-        } else {
+        }
+        if (currentUploadedData.length === 0) {
             setnoDataFound(true);
         }
-    }, [currentData]);
+    }, [currentData, dispatch, currentUploadedData, noDataFound]);
     return (
         <>
-            <InputItems inputValues={searchInput} />
+            <InputItems inputValues={searchInputs} />
             <Row>
                 <Col xs="12">
                     <Table>
@@ -140,6 +241,7 @@ const TableView = () => {
                                         item.endDate,
                                         'MM/DD/YYYY'
                                     );
+                                    // TODO: equal
                                     const inRange = currentTime.isBetween(
                                         startDate,
                                         endDate
@@ -180,17 +282,11 @@ const TableView = () => {
         </>
     );
 };
-const Home = () => {
-    // const searchString = 'avu';
-    // const regexp = new RegExp('avu', 'i');
-    // const filterItems = demoData.filter(x => regexp.test(x.name));
-    // console.log('====s====', filterItems);
-    return (
-        <Container>
-            <Header />
-            <TableView />
-        </Container>
-    );
-};
+const Home = () => (
+    <Container>
+        <Header />
+        <TableView />
+    </Container>
+);
 
 export default Home;

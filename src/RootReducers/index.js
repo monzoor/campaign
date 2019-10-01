@@ -1,6 +1,6 @@
 import { combineReducers } from 'redux';
-const test = [];
+import uploadedDatas from '../Components/Home/_Reducers/dataReducers';
 
 export default combineReducers({
-    test
+    uploadedDatas
 });
