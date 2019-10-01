@@ -5,7 +5,7 @@ import PublicLayout from '../Components/Layout/PublicLayout';
 import NotFound from '../Components/404';
 
 // Compoenent
-import Home from '../Components/Home';
+import Home from '../Components/Home/Home';
 
 export default [
     {
