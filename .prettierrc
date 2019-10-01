@@ -1,4 +1,5 @@
 {
     "singleQuote": true,
-    "tabWidth": 4
+    "tabWidth": 4,
+    "object-curly-newline": ["error", { "multiline": true }]
 }

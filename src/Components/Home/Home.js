@@ -1,5 +1,15 @@
 import React, { useMemo, useState, useEffect } from 'react';
-import { Container, Row, Col, Table, Badge } from 'reactstrap';
+import {
+    Container,
+    Row,
+    Col,
+    Table,
+    Badge,
+    InputGroup,
+    InputGroupText,
+    InputGroupAddon,
+    Input
+} from 'reactstrap';
 import moment from 'moment';
 import { formatToUnits } from '../../Utils/UnitFormatter';
 
@@ -49,6 +59,13 @@ const demoData = [
 ];
 
 const currentTime = moment(new Date(), 'MM/DD/YYYY');
+const Header = () => (
+    <Row className="text-center my-5">
+        <Col xs="12">
+            <h1>KUL - F-E Homework</h1>
+        </Col>
+    </Row>
+);
 const TableHeader = () => (
     <tr>
         <th>Name</th>
@@ -59,27 +76,53 @@ const TableHeader = () => (
     </tr>
 );
 
-const Home = () => {
-    const momoHeader = useMemo(() => <TableHeader />, []);
-    const [noDataFound, setnoDataFound] = useState(true);
-    useEffect(() => {
-        if (demoData.length) {
-            setnoDataFound(false);
-        }
-    }, []);
-
+const InputItems = ({ inputValues }) => {
+    const [inputValue, setInputValue] = useState('');
+    const searhInputValue = e => {
+        setInputValue(e.target.value);
+        inputValues(e.target.value);
+    };
     return (
-        <Container>
-            <Row className="text-center my-5">
-                <Col xs="12">
-                    <h1>KUL - F-E Homework</h1>
-                </Col>
-            </Row>
+        <Row className="py-4">
+            <Col xs="4"></Col>
+            <Col xs="4"></Col>
+            <Col xs="4">
+                <InputGroup>
+                    <Input value={inputValue} onChange={searhInputValue} />
+                    <InputGroupAddon addonType="append">
+                        <InputGroupText>Search</InputGroupText>
+                    </InputGroupAddon>
+                </InputGroup>
+            </Col>
+        </Row>
+    );
+};
 
+const TableView = () => {
+    const momoTableHeader = useMemo(() => <TableHeader />, []);
+    const [noDataFound, setnoDataFound] = useState(true);
+    const [currentData, setCurrentData] = useState(demoData);
+    const searchInput = val => {
+        const regexp = new RegExp(val, 'i');
+        const filterItems = demoData.filter(x => regexp.test(x.name));
+        // if (filterItems.length < -1)
+        setCurrentData(filterItems);
+    };
+    useEffect(() => {
+        console.log('====s====', currentData.length);
+        if (currentData.length > 0) {
+            setnoDataFound(false);
+        } else {
+            setnoDataFound(true);
+        }
+    }, [currentData]);
+    return (
+        <>
+            <InputItems inputValues={searchInput} />
             <Row>
                 <Col xs="12">
                     <Table>
-                        <thead>{momoHeader}</thead>
+                        <thead>{momoTableHeader}</thead>
                         <tbody>
                             {noDataFound ? (
                                 <tr>
@@ -88,8 +131,7 @@ const Home = () => {
                                     </td>
                                 </tr>
                             ) : (
-                                demoData.map(item => {
-                                    console.log('--');
+                                currentData.map(item => {
                                     const startDate = moment(
                                         item.startDate,
                                         'MM/DD/YYYY'
@@ -135,6 +177,18 @@ const Home = () => {
                     </Table>
                 </Col>
             </Row>
+        </>
+    );
+};
+const Home = () => {
+    // const searchString = 'avu';
+    // const regexp = new RegExp('avu', 'i');
+    // const filterItems = demoData.filter(x => regexp.test(x.name));
+    // console.log('====s====', filterItems);
+    return (
+        <Container>
+            <Header />
+            <TableView />
         </Container>
     );
 };
