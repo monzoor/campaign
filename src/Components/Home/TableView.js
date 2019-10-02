@@ -106,11 +106,6 @@ const TableView = () => {
             }
             return regexp.test(item.name);
         });
-        // if (filterItems.length === 0) {
-        //     setNoDataFound(true);
-        // } else {
-        //     setNoDataFound(false);
-        // }
         setCurrentData(filterItems);
     };
 
@@ -159,49 +154,49 @@ const TableView = () => {
                                     </td>
                                 </tr>
                             ) : (
-                                currentData.map(item => {
-                                    const startDate = moment(
-                                        item.startDate,
-                                        'MM/DD/YYYY'
-                                    );
-                                    const endDate = moment(
-                                        item.endDate,
-                                        'MM/DD/YYYY'
-                                    );
-                                    // TODO: equal
-                                    const inRange = currentTime.isBetween(
-                                        startDate,
-                                        endDate
-                                    );
-                                    return (
-                                        <tr key={item.id}>
-                                            <th scope="row">{item.name}</th>
-                                            <td>{item.startDate}</td>
-                                            <td>{item.endDate}</td>
-                                            <td>
-                                                <Badge
-                                                    color={
-                                                        inRange
-                                                            ? 'success'
-                                                            : 'danger'
-                                                    }
-                                                    pill
-                                                >
-                                                    &nbsp;
-                                                </Badge>
-                                                <span className="ml-2">
-                                                    {inRange
-                                                        ? 'Active'
-                                                        : 'Inactive'}
-                                                </span>
-                                            </td>
-                                            <td>
-                                                {formatToUnits(item.Budget, 1)}
-                                            </td>
-                                        </tr>
-                                    );
-                                })
-                            )}
+                                    currentData.map(item => {
+                                        const startDate = moment(
+                                            item.startDate,
+                                            'MM/DD/YYYY'
+                                        );
+                                        const endDate = moment(
+                                            item.endDate,
+                                            'MM/DD/YYYY'
+                                        );
+                                        // TODO: equal
+                                        const inRange = currentTime.isBetween(
+                                            startDate,
+                                            endDate
+                                        );
+                                        return (
+                                            <tr key={item.id}>
+                                                <th scope="row">{item.name}</th>
+                                                <td>{item.startDate}</td>
+                                                <td>{item.endDate}</td>
+                                                <td>
+                                                    <Badge
+                                                        color={
+                                                            inRange
+                                                                ? 'success'
+                                                                : 'danger'
+                                                        }
+                                                        pill
+                                                    >
+                                                        &nbsp;
+                                                    </Badge>
+                                                    <span className="ml-2">
+                                                        {inRange
+                                                            ? 'Active'
+                                                            : 'Inactive'}
+                                                    </span>
+                                                </td>
+                                                <td>
+                                                    {formatToUnits(item.Budget, 1)}
+                                                </td>
+                                            </tr>
+                                        );
+                                    })
+                                )}
                         </tbody>
                     </Table>
                 </Col>

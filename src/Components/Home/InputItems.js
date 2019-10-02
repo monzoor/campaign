@@ -25,15 +25,21 @@ const InputItems = ({ inputValues }) => {
             inputEndDate: endDate
         });
     };
-    const handleDateChangeRaw = e => {
+
+    const handleDateChangeRaw = (e) => {
         e.preventDefault();
     };
+
     useEffect(() => {
         if (startDate && endDate) {
             inputValues({
                 inputName: inputValue,
                 inputStartDate: startDate,
                 inputEndDate: endDate
+            });
+        } else {
+            inputValues({
+                inputName: inputValue,
             });
         }
         if (currentUploadedData.length > 0) {
@@ -53,8 +59,9 @@ const InputItems = ({ inputValues }) => {
                         selectsStart
                         dateFormat="MM/dd/yyyy"
                         onChange={date => setStartDate(date)}
-                        onChangeRaw={handleDateChangeRaw}
                         disabled={disabledAllinput}
+                        isClearable
+                        onChangeRaw={handleDateChangeRaw}
                     />
                 </FormGroup>
             </Col>
@@ -71,6 +78,7 @@ const InputItems = ({ inputValues }) => {
                         endDate={endDate}
                         minDate={startDate}
                         onChangeRaw={handleDateChangeRaw}
+                        isClearable
                     />
                 </FormGroup>
             </Col>
