@@ -26,7 +26,7 @@ const InputItems = ({ inputValues }) => {
         });
     };
 
-    const handleDateChangeRaw = (e) => {
+    const handleDateChangeRaw = e => {
         e.preventDefault();
     };
 
@@ -39,7 +39,7 @@ const InputItems = ({ inputValues }) => {
             });
         } else {
             inputValues({
-                inputName: inputValue,
+                inputName: inputValue
             });
         }
         if (currentUploadedData.length > 0) {

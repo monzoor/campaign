@@ -6,57 +6,6 @@ import { useSelector, useDispatch } from 'react-redux';
 import InputItems from './InputItems';
 
 import { formatToUnits } from '../../Utils/UnitFormatter';
-// const demoData = [
-//     {
-//         id: 0,
-//         name: 'Monzoor',
-//         startDate: '01/01/2020',
-//         endDate: '01/05/2020',
-//         Budget: 88377
-//     },
-//     {
-//         id: 1,
-//         name: 'Divavu',
-//         startDate: '9/19/2019',
-//         endDate: '3/9/2020',
-//         Budget: 88377
-//     },
-//     {
-//         id: 2,
-//         name: 'Jaxspan',
-//         startDate: '11/21/2017',
-//         endDate: '2/21/2018',
-//         Budget: 608715
-//     },
-//     {
-//         id: 3,
-//         name: 'Miboo',
-//         startDate: '11/1/2017',
-//         endDate: '6/20/2017',
-//         Budget: 239507
-//     },
-//     {
-//         id: 4,
-//         name: 'Trilith',
-//         startDate: '8/25/2017',
-//         endDate: '11/30/2017',
-//         Budget: 179838
-//     },
-//     {
-//         id: 5,
-//         name: 'Layo',
-//         startDate: '11/28/2017',
-//         endDate: '3/10/2018',
-//         Budget: 837850
-//     },
-//     {
-//         id: 6,
-//         name: 'Photojam',
-//         startDate: '7/25/2017',
-//         endDate: '6/23/2017',
-//         Budget: 858131
-//     }
-// ];
 
 const currentTime = moment(new Date(), 'MM/DD/YYYY');
 
@@ -76,6 +25,7 @@ const TableView = () => {
     const [invalidData, setInvalidData] = useState(false);
     const [noDataFound, setNoDataFound] = useState(true);
     const [currentData, setCurrentData] = useState(currentUploadedData);
+
     const searchInputs = ({ inputName, inputStartDate, inputEndDate }) => {
         const regexp = new RegExp(inputName, 'i');
         const filterItems = currentUploadedData.filter(item => {
@@ -122,7 +72,6 @@ const TableView = () => {
                 setNoDataFound(true);
             }
         };
-        // console.log(currentUploadedData.length, currentData.length);
         if (
             currentUploadedData.length > 0 &&
             noDataFound &&
@@ -163,10 +112,10 @@ const TableView = () => {
                                             item.endDate,
                                             'MM/DD/YYYY'
                                         );
-                                        // TODO: equal
                                         const inRange = currentTime.isBetween(
                                             startDate,
-                                            endDate
+                                            endDate,
+                                            null, '[]'
                                         );
                                         return (
                                             <tr key={item.id}>
