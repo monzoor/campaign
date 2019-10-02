@@ -5,10 +5,10 @@ const initialState = {
 const uploadedDatas = (state = initialState, action) => {
     switch (action.type) {
     case 'SELECTED_DATA': {
-        const { data } = action;
+        // const { data } = action;
         return {
             ...state,
-            data
+            data: [...state.data, ...action.data]
         };
     }
     default:

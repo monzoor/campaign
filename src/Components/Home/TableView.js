@@ -2,6 +2,7 @@ import React, { useMemo, useState, useEffect } from 'react';
 import { Row, Col, Table, Badge } from 'reactstrap';
 import moment from 'moment';
 import { useSelector, useDispatch } from 'react-redux';
+import shortid from 'shortid';
 
 import InputItems from './InputItems';
 
@@ -119,7 +120,7 @@ const TableView = () => {
                                         '[]'
                                     );
                                     return (
-                                        <tr key={item.id}>
+                                        <tr key={shortid.generate()}>
                                             <th scope="row">{item.name}</th>
                                             <td>{item.startDate}</td>
                                             <td>{item.endDate}</td>
@@ -141,7 +142,10 @@ const TableView = () => {
                                                 </span>
                                             </td>
                                             <td>
-                                                {formatToUnits(item.Budget, 1)}
+                                                {`${formatToUnits(
+                                                    item.Budget,
+                                                    1
+                                                )} USD`}
                                             </td>
                                         </tr>
                                     );

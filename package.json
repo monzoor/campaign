@@ -18,6 +18,7 @@
         "reactstrap": "^8.0.1",
         "redux": "^4.0.4",
         "redux-thunk": "^2.3.0",
+        "shortid": "^2.2.15",
         "styled-components": "^4.4.0"
     },
     "devDependencies": {
@@ -33,10 +34,10 @@
         "eject": "react-scripts eject",
         "format": "prettier --write \"**/*.+(js|jsx|json|css|md)\" && echo 'Format complete.'",
         "lint": "eslint --fix src/ --ext .js && echo 'Lint complete.'",
-        "check-all": "npm run format && npm run lint && echo 'Lint and format complete'"
+        "checkAll": "yarn format && yarn lint && echo 'Lint and format complete'"
     },
     "pre-commit": [
-        "check-all"
+        "checkAll"
     ],
     "eslintConfig": {
         "extends": [
