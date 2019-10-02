@@ -32,7 +32,7 @@
         "test": "react-scripts test",
         "eject": "react-scripts eject",
         "format": "prettier --write \"**/*.+(js|jsx|json|css|md)\" && echo 'Format complete.'",
-        "lint": "eslint --fix . && echo 'Lint complete.'",
+        "lint": "eslint --fix src/ --ext .js && echo 'Lint complete.'",
         "check-all": "npm run format && npm run lint && echo 'Lint and format complete'"
     },
     "pre-commit": [
